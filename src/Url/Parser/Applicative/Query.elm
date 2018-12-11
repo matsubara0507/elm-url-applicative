@@ -1,7 +1,7 @@
 module Url.Parser.Applicative.Query exposing
     ( Parser
-    , andApp
-    , app
+    , andApply
+    , apply
     , custom
     , enum
     , int
@@ -73,7 +73,7 @@ custom key func =
 
 
 
--- MAPPING
+-- COMBINING PARSERS
 
 
 map : (a -> b) -> Parser a -> Parser b
@@ -81,11 +81,11 @@ map func (Q.Parser a) =
     Q.Parser <| \dict -> func (a dict)
 
 
-app : Parser (a -> b) -> Parser a -> Parser b
-app (Q.Parser f) (Q.Parser a) =
+apply : Parser (a -> b) -> Parser a -> Parser b
+apply (Q.Parser f) (Q.Parser a) =
     Q.Parser <| \dict -> f dict (a dict)
 
 
-andApp : Parser a -> Parser (a -> b) -> Parser b
-andApp p1 p2 =
+andApply : Parser a -> Parser (a -> b) -> Parser b
+andApply p1 p2 =
     app p2 p1
